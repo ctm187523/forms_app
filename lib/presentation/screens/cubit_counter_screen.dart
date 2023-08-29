@@ -40,11 +40,17 @@ class _CubitCounterView extends StatelessWidget {
 
     //usamos el watch para estar atentos a los cambios en el state parecido a Riverpod, el watch redibuja un nuevo estado
     //podemos acceder a las propiedades y metodos de la clase creada CounterCubit, en este caso accedemos al state
-    final counterState = context.watch<CounterCubit>().state;
+    //LO COMENTAMOS ABAJO EN EL TITTLE DEL APPBAR LO HACEMOS DE OTRA MANERA SIN TNENER
+    //QUE USAR EL WATCH
+    //final counterState = context.watch<CounterCubit>().state;
     
     return Scaffold(
       appBar: AppBar(
-        title: Text('Cubit Counter: ${ counterState.transactionCount}'),
+        //usamos select y creamos una funcion con el parametro de tipo CounterCubit para acceder al estado de Bloc
+        title: context.select(( CounterCubit value ) {
+          return Text('Cubit Counter: ${ value.state.transactionCount }');
+        }),
+      
         actions: [
           IconButton(
               onPressed: () {  
@@ -61,7 +67,6 @@ class _CubitCounterView extends StatelessWidget {
           //LO COMENTAMOS PORQUE USAREMOS Equatable para esto ya que arriba al tener el wath se redibuja igualmente
           //buildWhen: (previous, current) => current.counter != previous.counter,
           builder: (context, state) {
-            print('counter cambio');
             return Text('Counter value: ${ state.counter }');
           },
         ),

@@ -64,7 +64,7 @@ class _CubitCounterView extends StatelessWidget {
         child: BlocBuilder<CounterCubit, CounterState>(
           //solo lo reconstruye si son diferentes los valores del counter usando buildwhen
           //si hacemos reset no cambia el counter y usando la condicion en el buidwhen no lo redibujamos al hacer reset
-          //LO COMENTAMOS PORQUE USAREMOS Equatable para esto ya que arriba al tener el wath se redibuja igualmente
+          //LO COMENTAMOS PORQUE USAREMOS Equatable(ver clase counter_state) para esto ya que arriba al tener el wath se redibuja igualmente
           //buildWhen: (previous, current) => current.counter != previous.counter,
           builder: (context, state) {
             return Text('Counter value: ${ state.counter }');

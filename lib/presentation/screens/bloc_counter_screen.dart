@@ -21,7 +21,7 @@ class BlocCounterView extends StatelessWidget {
     super.key,
   });
   
-  //metodo para llamar a los metodos de la clase CounterEvent del gestor de estado Blo CounterBloc
+  //metodo para llamar a los metodos de la clase CounterEvent del gestor de estado Bloc CounterBloc
   void increaseCounterBy( BuildContext context, [ int value = 1]){
     context.read<CounterBloc>()
       .add( CounterIncreased(value)); //con el metodo add disparamos los eventos en este caso el CounterIncreased del gestor de estados Bloc creado

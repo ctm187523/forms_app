@@ -48,7 +48,7 @@ class CustomTextFormField extends StatelessWidget {
       decoration: InputDecoration(
         //border cuando el input esta habilitado
         enabledBorder: border, //usamos la variable final creada arriba
-        focusedBorder: border.copyWith( borderSide: BorderSide( color: colors.primary)), //la caja con el foco canbia de color
+        focusedBorder: border.copyWith( borderSide: BorderSide( color: colors.primary)), //la caja con el foco cambia de color
         
         //diseño para cuando ocurre un error al introducir datos el usuario
         errorBorder: border.copyWith( borderSide: BorderSide( color: Colors.red.shade800)),

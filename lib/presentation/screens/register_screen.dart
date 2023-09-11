@@ -1,5 +1,7 @@
 
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:forms_app/presentation/blocs/register/register_cubit.dart';
 import 'package:forms_app/presentation/widgets/widgets.dart';
 
 class RegisterScreen extends StatelessWidget {
@@ -11,7 +13,12 @@ class RegisterScreen extends StatelessWidget {
       appBar: AppBar(
         title: const Text('Nuevo usuario'),
       ),
-      body: const _RegisterView(),
+      //envolvemos con el BlocProvider para que los hijos reciban el estado usado en
+      //este caso Cubit
+      body: BlocProvider(
+        create: (context) => RegisterCubit(),
+        child: const _RegisterView(),
+      ) ,
     );
   }
 }
@@ -47,6 +54,8 @@ class _RegisterView extends StatelessWidget {
 
 
 class _RegisterForm extends StatefulWidget {
+
+
   const _RegisterForm();
 
   @override
@@ -59,13 +68,13 @@ class _RegisterFormState extends State<_RegisterForm> {
   //para controlar el formulario basado en este key
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   
-  String username = '';
-  String email = '';
-  String password = '';
-
-
   @override
   Widget build(BuildContext context) {
+
+    //referenciamos al cubit para manejar el estado, con el watch cada vez que el estado cambia
+    //se dispara la renderizacion
+    final registerCubit = context.watch<RegisterCubit>();
+
     //Widget para controlar el formulario
     return Form(
       key: _formKey,
@@ -76,7 +85,12 @@ class _RegisterFormState extends State<_RegisterForm> {
           //los TextFormFields
           CustomTextFormField(
             label: 'Nombre de usario',
-            onChange: (value) => username = value, //le damos valor a la variable creada arriba
+            //usamos la referecia al estado(cubit) creada arriba, usamos la validacion del campo
+            //con _formKey creado arriba y el metodo validate de la clase Form de Flutter
+            onChange: (value) {
+              registerCubit.usernameChanged(value);
+              _formKey.currentState?.validate(); //validamos los campos
+            }, 
             validator: ( value ) {
               if( value == null || value.isEmpty ) return 'Campo requerido';
               if( value.trim().isEmpty ) return 'Campo requerido';
@@ -88,7 +102,12 @@ class _RegisterFormState extends State<_RegisterForm> {
           
           CustomTextFormField(
             label: 'Correo electrónico',
-            onChange: (value) => email = value, //le damos valor a la variable creada arriba
+            //usamos la referecia al estado(cubit) creada arriba, usamos la validacion del campo
+            //con _formKey creado arriba y el metodo validate de la clase Form de Flutter
+            onChange: (value) {
+              registerCubit.emailChanged(value);
+              _formKey.currentState?.validate(); //validamos los campos
+            }, 
             validator: ( value ) {
               if( value == null || value.isEmpty ) return 'Campo requerido';
               if( value.trim().isEmpty ) return 'Campo requerido';
@@ -108,7 +127,12 @@ class _RegisterFormState extends State<_RegisterForm> {
            CustomTextFormField(
             label: 'Contraseña',
             obscureText: true,
-            onChange: (value) => password = value, //le damos valor a la variable creada arriba
+            //usamos la referecia al estado(cubit) creada arriba, usamos la validacion del campo
+            //con _formKey creado arriba y el metodo validate de la clase Form de Flutter
+            onChange: (value) {
+              registerCubit.passwordChanged(value);
+              _formKey.currentState?.validate(); //validamos los campos
+            }, 
             validator: ( value ) {
               if( value == null || value.isEmpty ) return 'Campo requerido';
               if( value.trim().isEmpty ) return 'Campo requerido';
@@ -123,10 +147,10 @@ class _RegisterFormState extends State<_RegisterForm> {
             //cuando se presiona el boton de crear usuario
             onPressed: (){
 
-              final isValid = _formKey.currentState!.validate(); //usamos la funcion validate de arriba de Form
+              final isValid = _formKey.currentState!.validate(); //usamos la funcion validate de la classe Form de Flutter
               if ( !isValid ) return;
 
-              print('$username, $email, $password');
+             registerCubit.onSubmit();
             }, 
             icon: const Icon(Icons.save),
             label: const Text('Crear Usuario'),

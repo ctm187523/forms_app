@@ -147,8 +147,8 @@ class _RegisterFormState extends State<_RegisterForm> {
             //cuando se presiona el boton de crear usuario
             onPressed: (){
 
-              final isValid = _formKey.currentState!.validate(); //usamos la funcion validate de la classe Form de Flutter
-              if ( !isValid ) return;
+              // final isValid = _formKey.currentState!.validate(); //usamos la funcion validate de la classe Form de Flutter
+              // if ( !isValid ) return;
 
              registerCubit.onSubmit();
             }, 

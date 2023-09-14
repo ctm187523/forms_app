@@ -53,21 +53,12 @@ class _RegisterView extends StatelessWidget {
 }
 
 
-class _RegisterForm extends StatefulWidget {
+class _RegisterForm extends StatelessWidget {
 
 
   const _RegisterForm();
 
-  @override
-  State<_RegisterForm> createState() => _RegisterFormState();
-}
-
-class _RegisterFormState extends State<_RegisterForm> {
-
   //creamos un objeto GlobalKey para enlazar con el key del widget Form de abajo 
-  //para controlar el formulario basado en este key
-  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  
   @override
   Widget build(BuildContext context) {
 
@@ -75,9 +66,14 @@ class _RegisterFormState extends State<_RegisterForm> {
     //se dispara la renderizacion
     final registerCubit = context.watch<RegisterCubit>();
 
+    //obtenemos referencias a las propiedades del estado del gestor de estado creado Cubit(registerCubit)
+    final username = registerCubit.state.username;
+    final email = registerCubit.state.email;
+    final password = registerCubit.state.password;
+
     //Widget para controlar el formulario
     return Form(
-      key: _formKey,
+      //key: _formKey,
       child: Column(
         children: [
 
@@ -87,40 +83,42 @@ class _RegisterFormState extends State<_RegisterForm> {
             label: 'Nombre de usario',
             //usamos la referecia al estado(cubit) creada arriba, usamos la validacion del campo
             //con _formKey creado arriba y el metodo validate de la clase Form de Flutter
-            onChange: (value) {
-              registerCubit.usernameChanged(value);
-              _formKey.currentState?.validate(); //validamos los campos
-            }, 
-            validator: ( value ) {
-              if( value == null || value.isEmpty ) return 'Campo requerido';
-              if( value.trim().isEmpty ) return 'Campo requerido';
-              if( value.length < 6 ) return 'Más de 6 letras';
-              return null;
-            },
+            onChange: registerCubit.usernameChanged,
+            //LO COMENTAMOS AL USAR LOS INPUTS YA NO NOS HACE FALTA,YA LOS INCLUYE
+            // validator: ( value ) {
+            //   if( value == null || value.isEmpty ) return 'Campo requerido';
+            //   if( value.trim().isEmpty ) return 'Campo requerido';
+            //   if( value.length < 6 ) return 'Más de 6 letras';
+            //   return null;
+            // },
+
+            
+            //Usamos el getter creado en el input Username infrastructure/inputs
+            errorMessage: username.errorMessage   
           ),
+          
           const SizedBox(height: 10),
           
           CustomTextFormField(
             label: 'Correo electrónico',
             //usamos la referecia al estado(cubit) creada arriba, usamos la validacion del campo
             //con _formKey creado arriba y el metodo validate de la clase Form de Flutter
-            onChange: (value) {
-              registerCubit.emailChanged(value);
-              _formKey.currentState?.validate(); //validamos los campos
-            }, 
-            validator: ( value ) {
-              if( value == null || value.isEmpty ) return 'Campo requerido';
-              if( value.trim().isEmpty ) return 'Campo requerido';
+            onChange: registerCubit.emailChanged, 
+            //LO COMENTAMOS AL USAR LOS INPUTS YA NO NOS HACE FALTA,YA LOS INCLUYE
+            // validator: ( value ) {
+            //   if( value == null || value.isEmpty ) return 'Campo requerido';
+            //   if( value.trim().isEmpty ) return 'Campo requerido';
               
-              //creamos una expresion regular para validar el correo
-              final emailRegExp = RegExp(
-                r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$',
-              );
+            //   //creamos una expresion regular para validar el correo
+            //   final emailRegExp = RegExp(
+            //     r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$',
+            //   );
 
-              //comprobamos la expresion regular con lo escrito por el usuario
-              if(!emailRegExp.hasMatch(value)) return 'No tiene formato de correo';
-              return null;
-            },
+            //   //comprobamos la expresion regular con lo escrito por el usuario
+            //   if(!emailRegExp.hasMatch(value)) return 'No tiene formato de correo';
+            //   return null;
+            // },
+            errorMessage: email.errorMessage,
           ),
            const SizedBox(height: 10),
           
@@ -129,16 +127,15 @@ class _RegisterFormState extends State<_RegisterForm> {
             obscureText: true,
             //usamos la referecia al estado(cubit) creada arriba, usamos la validacion del campo
             //con _formKey creado arriba y el metodo validate de la clase Form de Flutter
-            onChange: (value) {
-              registerCubit.passwordChanged(value);
-              _formKey.currentState?.validate(); //validamos los campos
-            }, 
-            validator: ( value ) {
-              if( value == null || value.isEmpty ) return 'Campo requerido';
-              if( value.trim().isEmpty ) return 'Campo requerido';
-              if( value.length < 6 ) return 'Más de 6 letras';
-              return null;
-            },
+            onChange: registerCubit.passwordChanged, 
+            //LO COMENTAMOS AL USAR LOS INPUTS YA NO NOS HACE FALTA,YA LOS INCLUYE
+            // validator: ( value ) {
+            //   if( value == null || value.isEmpty ) return 'Campo requerido';
+            //   if( value.trim().isEmpty ) return 'Campo requerido';
+            //   if( value.length < 6 ) return 'Más de 6 letras';
+            //   return null;
+            // },
+            errorMessage: password.errorMessage,
           ),
           
           const SizedBox(height: 20),

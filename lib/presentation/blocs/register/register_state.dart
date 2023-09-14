@@ -1,7 +1,7 @@
 part of 'register_cubit.dart';
 
 //creamos un enum para los diferentes posibles estados del formulario
-enum FormStatus { invalid, valid, validation, posting}
+enum FormStatus { invalid, valid, validating, posting}
 
 class RegisterFormState extends Equatable {
   
@@ -9,7 +9,7 @@ class RegisterFormState extends Equatable {
   final FormStatus formStatus;
   final bool isValid;
   final Username username; //cambiamos el tipo de objeto String por Username creado en infrastructure/inputs
-  final String email;
+  final Email email;
   final Password password; //cambiamos el tipo de objeto String por Password creado en infrastructure/inputs
 
   //constructor
@@ -17,8 +17,8 @@ class RegisterFormState extends Equatable {
     this.formStatus = FormStatus.invalid,
     this.isValid = false,
     this.username = const Username.pure(), //establecemos el valor inicial
-    this.email = '',
-    this.password= const Password.pure()
+    this.email = const Email.pure(),
+    this.password = const Password.pure()
   });
 
   //usamos el copyWith para crear nuevos estados
@@ -26,7 +26,7 @@ class RegisterFormState extends Equatable {
     FormStatus? formStatus,
     bool? isValid,
     Username? username,
-    String? email,
+    Email? email,
     Password? password,
   }) => RegisterFormState( //si no vienen ponemos los que viene por defecto en la clase padre
      formStatus: formStatus ?? this.formStatus,
